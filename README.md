@@ -40,6 +40,10 @@ parameter the page uses the visitor's last choice, then the browser language
 (Russian for ru/be/uk/kk, English otherwise). `assets/og-image.jpg` is the
 link-preview card; regenerate it if the hero headline changes.
 
+Headings use the Gatchina typeface by Dimitri Antonov / Blue Curve Designstudio
+(CC BY 4.0, credited in the footer). `assets/fonts/` holds Latin + Cyrillic
+WOFF2 subsets of the regular and italic styles made with `pyftsubset`.
+
 The interactive comparison encodes the supplied portrait to JPEG locally in the
 browser. Its file sizes and reduction percentages come from the actual source
 and generated blobs; they are a browser demonstration, not a benchmark of the
