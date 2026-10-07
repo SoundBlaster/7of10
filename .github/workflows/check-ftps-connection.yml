@@ -62,7 +62,12 @@ jobs:
               print('PASS: authentication and encrypted data channel.', flush=True)
               print('Login directory: ' + ftp.pwd(), flush=True)
               stage = 'target directory access'
-              ftp.cwd(os.environ['FTP_REMOTE_ROOT'])
+              try:
+                  ftp.cwd(os.environ['FTP_REMOTE_ROOT'])
+              except ftplib.error_perm:
+                  print('Requested path is unavailable. Listing the login root for diagnosis:', flush=True)
+                  print(repr(ftp.nlst()[:20]), flush=True)
+                  raise
               count = sum(1 for _ in ftp.nlst())
               print(f'PASS: target directory can be listed ({count} entries).', flush=True)
               print('No files uploaded, changed, or deleted.', flush=True)
