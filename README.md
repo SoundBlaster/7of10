@@ -24,3 +24,26 @@ certificate cannot be validated.
 A push that changes `website/7of10/` deploys the site and checks the landing,
 privacy, and support URLs. A deployment can also be started manually from the
 Actions tab.
+
+## Local preview
+
+No build step or dependencies are required:
+
+```sh
+python3 -m http.server 8794 --bind 127.0.0.1 --directory website
+```
+
+Open `http://127.0.0.1:8794/7of10/`. The landing page uses `landing.css` and
+`landing.js`; the support and privacy pages retain their shared `styles.css`.
+RU/EN switches all landing copy and can be linked with `?lang=en`.
+
+The interactive comparison encodes the supplied portrait to JPEG locally in the
+browser. Its file sizes and reduction percentages come from the actual source
+and generated blobs; they are a browser demonstration, not a benchmark of the
+native compression engine. Three presets change dimensions and JPEG quality.
+Without JavaScript or canvas support, the original image and landing content
+remain available. App screenshots are supplied project assets, displayed with
+CSS framing; the Shortcuts action currently handles one image per run.
+
+App Store availability is intentionally shown as “coming soon” until a verified
+product URL is available. Update both language variants when the app launches.
