@@ -39,9 +39,9 @@
     document.querySelectorAll('[data-alt-ru]').forEach((element) => { element.alt = element.dataset[next === 'ru' ? 'altRu' : 'altEn']; });
     document.querySelectorAll('[data-label-ru]').forEach((element) => { element.setAttribute('aria-label', element.dataset[next === 'ru' ? 'labelRu' : 'labelEn']); });
     document.querySelectorAll('[data-language]').forEach((button) => { button.setAttribute('aria-pressed', String(button.dataset.language === next)); });
-    document.title = next === 'ru' ? '7 of 10 — меньше вес, больше свободы' : '7 of 10 — lighter photos, more possibilities';
+    document.title = next === 'ru' ? '7 из 10 — меньше вес, больше свободы' : '7 of 10 — lighter photos, more possibilities';
     $('meta[name="description"]').content = next === 'ru'
-      ? '7 of 10 — сжимайте фотографии на iPhone и iPad. Настройте размер, сравните детали и сохраните JPEG-копию. Всё на вашем устройстве.'
+      ? '7 из 10 — сжимайте фотографии на iPhone и iPad. Настройте размер, сравните детали и сохраните JPEG-копию. Всё на вашем устройстве.'
       : '7 of 10 — compress photos on iPhone and iPad. Choose a size, compare the details, and save a JPEG copy. All on your device.';
     // Open the support and privacy pages at the matching language section.
     document.querySelectorAll('a[href^="support/"], a[href^="privacy/"]').forEach((link) => {
