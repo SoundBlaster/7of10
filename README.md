@@ -35,7 +35,10 @@ python3 -m http.server 8794 --bind 127.0.0.1 --directory website
 
 Open `http://127.0.0.1:8794/7of10/`. The landing page uses `landing.css` and
 `landing.js`; the support and privacy pages retain their shared `styles.css`.
-RU/EN switches all landing copy and can be linked with `?lang=en`.
+RU/EN switches all landing copy and can be linked with `?lang=en`. Without the
+parameter the page uses the visitor's last choice, then the browser language
+(Russian for ru/be/uk/kk, English otherwise). `assets/og-image.jpg` is the
+link-preview card; regenerate it if the hero headline changes.
 
 The interactive comparison encodes the supplied portrait to JPEG locally in the
 browser. Its file sizes and reduction percentages come from the actual source
