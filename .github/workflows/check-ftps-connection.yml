@@ -32,6 +32,7 @@ jobs:
           python3 - <<'PY'
           import ftplib
           import os
+          import posixpath
           import ssl
           import sys
           import urllib.request
@@ -65,8 +66,12 @@ jobs:
               try:
                   ftp.cwd(os.environ['FTP_REMOTE_ROOT'])
               except ftplib.error_perm:
-                  print('Requested path is unavailable. Listing the login root for diagnosis:', flush=True)
-                  print(repr(ftp.nlst()[:20]), flush=True)
+                  parent = posixpath.dirname(os.environ['FTP_REMOTE_ROOT'].rstrip('/')) or '/'
+                  ftp.cwd(parent)
+                  entries = ftp.nlst()
+                  child = posixpath.basename(os.environ['FTP_REMOTE_ROOT'].rstrip('/'))
+                  exists = any(posixpath.basename(entry.rstrip('/')) == child for entry in entries)
+                  print(f'Parent directory {parent} is accessible; target entry present: {exists}.', flush=True)
                   raise
               count = sum(1 for _ in ftp.nlst())
               print(f'PASS: target directory can be listed ({count} entries).', flush=True)
