@@ -34,6 +34,7 @@ jobs:
           import os
           import ssl
           import sys
+          import urllib.request
 
           required = ('FTP_HOST', 'FTP_PORT', 'FTP_USER', 'FTP_REMOTE_ROOT', 'FTP_PASSWORD')
           missing = [name for name in required if not os.environ.get(name)]
@@ -42,7 +43,15 @@ jobs:
           if os.environ['FTP_PORT'] != '21':
               sys.exit('Expected explicit FTPS on port 21.')
           stage = 'TLS connection'
-          ftp = ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=20)
+          context = ssl.create_default_context()
+          # The hosting server omits this intermediate. Keep the system roots
+          # and hostname verification; do not enable partial-chain trust.
+          context.verify_flags &= ~ssl.VERIFY_X509_PARTIAL_CHAIN
+          issuer_url = 'https://secure.globalsign.com/cacert/gsgccr6alphasslca2025.crt'
+          with urllib.request.urlopen(issuer_url, timeout=20) as response:
+              intermediate = response.read()
+          context.load_verify_locations(cadata=ssl.DER_cert_to_PEM_cert(intermediate))
+          ftp = ftplib.FTP_TLS(context=context, timeout=20)
           try:
               ftp.connect(os.environ['FTP_HOST'], 21)
               ftp.auth()
