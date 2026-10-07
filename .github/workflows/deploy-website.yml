@@ -1,0 +1,80 @@
+name: Deploy 7 of 10 website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "website/7of10/**"
+      - ".github/workflows/deploy-website.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-7of10-website
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Upload static site over FTPS
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: FTP
+    env:
+      FTP_HOST: ${{ vars.FTP_HOST }}
+      FTP_PORT: ${{ vars.FTP_PORT }}
+      FTP_USER: ${{ vars.FTP_USER }}
+      FTP_REMOTE_ROOT: ${{ vars.FTP_REMOTE_ROOT }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTPS_ALLOW_UNVERIFIED_CERT: ${{ vars.FTPS_ALLOW_UNVERIFIED_CERT }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate deployment settings
+        run: |
+          set -euo pipefail
+          test -n "$FTP_HOST"
+          test "$FTP_PORT" = "21"
+          test -n "$FTP_USER"
+          test -n "$FTP_PASSWORD"
+          test "$FTP_REMOTE_ROOT" = "/www/egormerkushev.ru/7of10"
+          test -f website/7of10/index.html
+
+      - name: Install FTPS client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Upload site
+        run: |
+          set -euo pipefail
+          FTPS_VERIFY_CERT_LINE=""
+          if [ "${FTPS_ALLOW_UNVERIFIED_CERT:-}" = "true" ]; then
+            FTPS_VERIFY_CERT_LINE="set ssl:verify-certificate false"
+          fi
+
+          lftp -u "$FTP_USER,$FTP_PASSWORD" "ftp://$FTP_HOST:$FTP_PORT" <<EOF
+          set ftp:ssl-allow true
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          $FTPS_VERIFY_CERT_LINE
+          set net:max-retries 2
+          set net:timeout 30
+          lcd "$GITHUB_WORKSPACE/website/7of10"
+          mkdir -p "$FTP_REMOTE_ROOT"
+          mirror -R --verbose --exclude-glob .DS_Store . "$FTP_REMOTE_ROOT"
+          bye
+          EOF
+
+      - name: Verify published pages
+        run: |
+          set -euo pipefail
+          for page in /7of10/ /7of10/privacy/ /7of10/support/; do
+            curl --fail --silent --show-error --location \
+              "https://egormerkushev.ru${page}" --output /dev/null
+          done
