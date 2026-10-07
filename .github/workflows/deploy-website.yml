@@ -76,8 +76,8 @@ jobs:
           set net:max-retries 2
           set net:timeout 30
           lcd "$GITHUB_WORKSPACE/website/7of10"
-          mkdir -p "$FTP_REMOTE_ROOT"
-          mirror -R --verbose --exclude-glob .DS_Store . "$FTP_REMOTE_ROOT"
+          cd "$FTP_REMOTE_ROOT"
+          mirror -R --verbose --exclude-glob .DS_Store . .
           bye
           EOF
 
