@@ -16,14 +16,16 @@ Configure these environment values in the repository's `FTP` environment:
 - `FTP_USER`
 - `FTP_REMOTE_ROOT` (`/www/egormerkushev.ru/7of10`)
 
-Store the account password as the `FTP_PASSWORD` environment secret. The
-optional `FTPS_ALLOW_UNVERIFIED_CERT` variable defaults to certificate
-verification enabled; only set it to `true` if the hosting endpoint's
-certificate cannot be validated.
+Store the account password as the `FTP_PASSWORD` environment secret. Use
+`server209.hosting.reg.ru` as `FTP_HOST`: its certificate covers the hostname,
+whereas the server's IP address does not. The workflow downloads the missing
+GlobalSign intermediate over HTTPS, verifies it against Ubuntu's trusted roots,
+and supplies the full CA bundle to lftp. Certificate and hostname verification
+remain enabled.
 
 A push that changes `website/7of10/` deploys the site and checks the landing,
-privacy, and support URLs. A deployment can also be started manually from the
-Actions tab.
+privacy, and support URLs, then verifies every hosted file against the deployed
+commit. A deployment can also be started manually from the Actions tab.
 
 ## Local preview
 
