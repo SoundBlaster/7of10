@@ -1,0 +1,67 @@
+name: Check FTPS connection (read only)
+
+on:
+  push:
+    branches: [codex/ftps-connection-check]
+    paths: [.github/workflows/check-ftps-connection.yml]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: check-7of10-ftps
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Verify TLS, login, and directory access
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/codex/ftps-connection-check'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    environment: FTP
+    env:
+      FTP_HOST: ${{ vars.FTP_HOST }}
+      FTP_PORT: ${{ vars.FTP_PORT }}
+      FTP_USER: ${{ vars.FTP_USER }}
+      FTP_REMOTE_ROOT: ${{ vars.FTP_REMOTE_ROOT }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Connect without uploading or changing files
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import ftplib
+          import os
+          import ssl
+          import sys
+
+          required = ('FTP_HOST', 'FTP_PORT', 'FTP_USER', 'FTP_REMOTE_ROOT', 'FTP_PASSWORD')
+          missing = [name for name in required if not os.environ.get(name)]
+          if missing:
+              sys.exit('Missing settings: ' + ', '.join(missing))
+          if os.environ['FTP_PORT'] != '21':
+              sys.exit('Expected explicit FTPS on port 21.')
+          stage = 'TLS connection'
+          ftp = ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=20)
+          try:
+              ftp.connect(os.environ['FTP_HOST'], 21)
+              ftp.auth()
+              print('PASS: certificate chain and hostname verified.', flush=True)
+              stage = 'authentication'
+              ftp.login(os.environ['FTP_USER'], os.environ['FTP_PASSWORD'])
+              ftp.prot_p()
+              print('PASS: authentication and encrypted data channel.', flush=True)
+              print('Login directory: ' + ftp.pwd(), flush=True)
+              stage = 'target directory access'
+              ftp.cwd(os.environ['FTP_REMOTE_ROOT'])
+              count = sum(1 for _ in ftp.nlst())
+              print(f'PASS: target directory can be listed ({count} entries).', flush=True)
+              print('No files uploaded, changed, or deleted.', flush=True)
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+                  summary.write('FTPS certificate, login, and target directory listing passed.\n\n')
+                  summary.write('This read-only check does not verify write permissions or publish the site.\n')
+          except (OSError, ftplib.Error) as exc:
+              sys.exit(f'FAIL at {stage}: {exc}')
+          finally:
+              ftp.close()
+          PY
