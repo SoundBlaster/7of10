@@ -6,8 +6,7 @@ a{color:inherit;text-decoration:none}
 .topbar,main,footer{width:min(1120px,calc(100% - 48px));margin-inline:auto}
 .topbar{height:92px;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:700;letter-spacing:-.04em}
-.brand-mark{width:36px;height:36px;border:1px solid #d7dbe6;border-radius:50%;background:linear-gradient(145deg,#fff,#dceeff);box-shadow:0 5px 18px #3479bd22;display:flex;align-items:center;justify-content:center;color:#151821;font-size:25px;font-weight:600;line-height:1}
-.brand-mark span+span{margin-left:-5px}
+.brand-mark{width:36px;height:36px;display:block;flex-shrink:0;filter:drop-shadow(0 3px 5px #292c2812)}
 .language{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:#fff}
 .language a{padding:6px 11px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:700}.language a[aria-current="true"]{background:#edf4ff;color:var(--blue)}
 .hero{min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;align-items:center;gap:40px;padding:44px 0 74px}

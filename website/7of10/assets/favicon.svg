@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#e7e3ef"/><g stroke="#514477" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m24 23-9 9 9 9m16-18 9 9-9 9"/><path d="M32 15v34" stroke-width="2"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="588" height="588" viewBox="218 218 588 588">
+  <!-- Exact Lens.svg and ComparisonArrows.svg geometry from PhotoCompressor AppIcon.icon. -->
+  <defs>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eeeaf5"/>
+    </linearGradient>
+  </defs>
+  <circle cx="512" cy="512" r="270" fill="#ffffff"/>
+  <circle cx="512" cy="512" r="270" fill="url(#glass)" stroke="#d8d4e2" stroke-width="8"/>
+  <path d="M 465 412 L 365 512 L 465 612 M 559 412 L 659 512 L 559 612" fill="none" stroke="#252525" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
