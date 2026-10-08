@@ -29,6 +29,9 @@
     document.querySelectorAll('[data-ru][data-en]').forEach((element) => {
       element.textContent = element.dataset[language];
     });
+    document.querySelectorAll('[data-label-ru][data-label-en]').forEach((element) => {
+      element.setAttribute('aria-label', element.dataset[language === 'ru' ? 'labelRu' : 'labelEn']);
+    });
     document.title = language === 'ru'
       ? `${document.querySelector('h1').textContent} — 7 из 10`
       : pageTitle;
