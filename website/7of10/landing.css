@@ -29,3 +29,7 @@
 
 
 .availability:hover,.coming-soon:hover{text-decoration:underline;text-underline-offset:4px}
+
+.hero-actions .text-link{margin-top:0}
+
+.closing-actions .button{gap:20px}
