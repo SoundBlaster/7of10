@@ -27,3 +27,5 @@
 .wordmark{display:inline-flex;align-items:baseline;font:400 1.5em/1 var(--serif);letter-spacing:0}.wordmark i{font-size:.48em;font-style:italic;color:var(--purple);margin:0 .14em 0 .06em;transform:translateY(-.62em)}
 .brand{letter-spacing:0}.closing-wordmark{font-size:76px;margin:-6px 0 22px;color:var(--ink)}.closing-wordmark .wordmark{font-size:1em}@media(max-width:760px){.closing-wordmark{font-size:60px}}.footer>.brand .wordmark{font-size:1.3em}
 
+
+.availability:hover,.coming-soon:hover{text-decoration:underline;text-underline-offset:4px}
