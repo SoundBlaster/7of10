@@ -54,5 +54,5 @@ Without JavaScript or canvas support, the original image and landing content
 remain available. App screenshots are supplied project assets, displayed with
 CSS framing; the Shortcuts action currently handles one image per run.
 
-App Store availability is intentionally shown as “coming soon” until a verified
-product URL is available. Update both language variants when the app launches.
+The app is available on the App Store. Keep the landing page's RU/EN store links
+and availability copy aligned with the published product page.
